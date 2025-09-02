@@ -76,91 +76,15 @@ function avance_dos_carril_valocidades_promedio(pasos,vehiculos,egoismo,δt,L,d_
     
       avance_dos_carriles_con_giro_sin_anim(vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
         
-       V[t] = 3.5*velocidad_promedio(vehiculos)
-    end
-    
-    return T,V
-end
-
-
-""" funcion que nos regresa un arreglo de tiempos y velocidades promedios dos carriles"""   
-function avance_dos_carril_valocidades_promedio_2(pasos,vehiculos,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-    
-    carriless = carriles(1,2)
-    giro_nogiro = comprobacion_giro(vehiculos)
-    θ_vec = zeros(length(vehiculos))
-    en_carril = carros_i_carriles(vehiculos,carriless)
-    carriles_original = carril_original(vehiculos,en_carril)
-    
-    #T = [t*δt for t in 1:pasos]
-    V = zeros(pasos)
-    
-    for t in 1:pasos
-    
-      avance_dos_carriles_con_giro_sin_anim(vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-        
-       V[t] = 3.5*velocidad_promedio(vehiculos)
-    end
-    
-    return V
-end
-
-
-""" funcion que nos regresa un arreglo de tiempos y velocidades promedios en y dos carriles"""   
-function avance_dos_carril_valocidades_promedio_y(pasos,vehiculos,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-    
-    carriless = carriles(1,2)
-    giro_nogiro = comprobacion_giro(vehiculos)
-    θ_vec = zeros(length(vehiculos))
-    en_carril = carros_i_carriles(vehiculos,carriless)
-    carriles_original = carril_original(vehiculos,en_carril)
-    
-    T = [t*δt for t in 1:pasos]
-    V = zeros(pasos)
-    
-    for t in 1:pasos
-    
-      avance_dos_carriles_con_giro_sin_anim(vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-        
        V[t] = 3.5*velocidad_promedio_y(vehiculos)
     end
     
     return T,V
 end
 
-""" funcion que nos regresa un arreglo de velocidades peomedio de promedios y egoismos despues de un tiempo critico a densidad fija dos carriles"""     
 
 
-function medicion_velocidades_egoismo_avance(pasos,t,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-    
-    t_critico = Int(ceil(t/δt))
-        
-        iteraciones = 0:0.1:1
-    p = length(iteraciones)
-    
-    V = zeros(p)
-    E = zeros(p)  
-       
-    i = 1
-    
-    for e in iteraciones
-        @show i
-        egoismo = e
-        vehiculos = carros_dos_carriles(ancho,largo,L,d1,d2,n,m; xs = 1/2)
-    V1 = avance_dos_carril_valocidades_promedio_2(pasos,vehiculos,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-        
-     V[i]  = sum(V1[t_critico:end])/length(V1[t_critico:end])
-     E[i] = e
-        
-     i += 1   
-        
-    end
-    
-    return E,V
-    
-    
-end  
-    
+
 """ funcion que mide la distancia entre dos puntos diferenetes en el tiempo  de un auto (el desplazamiento debe ser pequeño)   """
 
 
@@ -168,9 +92,8 @@ function desplazamiento_auto(pos_actual,pos_nueva,L)
     
     if (L  - pos_actual[2] ) < (L  - pos_nueva[2] )
         
-        pos_nueva[2] = L + pos_nueva[2]
         
-        return norm(pos_nueva - pos_actual)
+        return norm([pos_nueva[1],L + pos_nueva[2]] - pos_actual)
     end
     
     return norm(pos_nueva - pos_actual) 
@@ -183,104 +106,71 @@ function desplazamiento_auto_y(pos_actual,pos_nueva,L)
     
     if (L  - pos_actual[2] ) < (L  - pos_nueva[2] )
         
-        pos_nueva[2] = L + pos_nueva[2]
         
-        return abs(pos_nueva[2] - pos_actual[2])
+        return abs(L + pos_nueva[2] - pos_actual[2])
     end
     
     return abs(pos_nueva[2] - pos_actual[2]) 
 end
 
-""" funcion que nos da el desplazmiento de un auto en un instante t, da el desplazamiento general y el desplazamiento en "y" """
-
-function avance_dos_carriles_con_giro_desplazamiento(vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-    
-    
-    desplazamiento = zeros(length(vehiculos))
-    desplazamiento_y = zeros(length(vehiculos))
-    
-    indices_alternados = generar_indices_alternados(n, m)   
-    for i in indices_alternados
-        
-       pos_actual = copy(vehiculos[i].posicion) 
-         avance_dos_carriles_con_giro_un_paso(i,vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min;error,err)
-        
-        
-        pos_nueva = copy(vehiculos[i].posicion)
-        
-        desplazamiento[i] = desplazamiento_auto(pos_actual,pos_nueva,L)
-        desplazamiento_y[i] = desplazamiento_auto_y(pos_actual,pos_nueva,L)
-        
-    end
-    
-    
-    return desplazamiento,desplazamiento_y
-
-end
-    
-    
-""" funcion que nos da el desplazamiento de los autos"""
-
-function avance_dos_carril_desplazamiento_promedio_normalizado(pasos,vehiculos,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-    
-    carriless = carriles(1,2)
+function medicion_velocidades_flujo_desplazamiento(pasos, vehiculos, egoismo, δt, L, d_0_1, d_0_2, α, μ, g, T_reac, colchon, acel, v_max, v_min, n, m; error=1e-2, err=1e-6)
+    carriless = carriles(1, 2)
     giro_nogiro = comprobacion_giro(vehiculos)
     θ_vec = zeros(length(vehiculos))
-    en_carril = carros_i_carriles(vehiculos,carriless)
-    carriles_original = carril_original(vehiculos,en_carril)
+    en_carril = carros_i_carriles(vehiculos, carriless)
+    carriles_original = carril_original(vehiculos, en_carril)
     
+    desplazamiento = zeros(pasos)
+    desplazamiento_y = zeros(pasos)
+    T = [t * δt for t in 1:pasos]
+    V = zeros(pasos)
     
-    des = zeros(length(vehiculos))
-    des_y = zeros(length(vehiculos))
+    estimado = length(vehiculos) * pasos * 2
+    tiempos_cruce = Vector{Float64}(undef, estimado)
+    count = 0
+    
+    # Pre-allocar arrays para posiciones iniciales
+    posiciones_iniciales = [copy(vehiculos[i].posicion) for i in 1:length(vehiculos)]
     
     for t in 1:pasos
+        indices_alternados = generar_indices_alternados(n, m)  
+        #indices_alternados = 1:length(vehiculos)
+        des = zeros(length(vehiculos))
+        des_y = zeros(length(vehiculos))
         
-  
-    
-  desplazamiento, desplazamiento_y =    avance_dos_carriles_con_giro_desplazamiento(vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error ,err)
+        # Guardar posiciones ANTES de cualquier movimiento
+        for i in indices_alternados
+            posiciones_iniciales[i] = copy(vehiculos[i].posicion)
+        end
         
-        des += 3.5*desplazamiento
-        des_y += 3.5*desplazamiento_y
-       
+        # Ejecutar todos los movimientos
+        for i in indices_alternados
+            avance_dos_carriles_con_giro_un_paso(i, vehiculos, θ_vec, carriless, carriles_original, giro_nogiro, egoismo, δt, L, d_0_1, d_0_2, α, μ, g, T_reac, colchon, acel, v_max, v_min; error, err)
+            test = limites_auto_carril!(vehiculos[i], L)
+            
+            if test
+                count += 1
+                tiempos_cruce[count] = t * δt
+            end
+        end
+        
+        # Calcular desplazamientos DESPUÉS de todos los movimientos
+        for i in indices_alternados
+            des[i] = desplazamiento_auto(posiciones_iniciales[i], vehiculos[i].posicion, L)
+            des_y[i] = desplazamiento_auto_y(posiciones_iniciales[i], vehiculos[i].posicion, L)
+        end
+        
+        desplazamiento[t] = sum(des) / length(des)
+        desplazamiento_y[t] = sum(des_y) / length(des_y)
+        V[t] = velocidad_promedio_y(vehiculos)
     end
     
-    des_prom = sum(des)/length(des)
-    des_prom_y = sum(des_y)/length(des_y)
-    
-    return des_prom/des_prom_y
+    return T, V, tiempos_cruce[1:count], desplazamiento, desplazamiento_y
 end
+
+
     
-    
-function medicion_desplazamiento_egoismo(pasos,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
-    
-        
-        iteraciones = 0:0.1:1
-    p = length(iteraciones)
-    
-    D = zeros(p)
-    E = zeros(p)  
-       
-    i = 1
-    
-    for e in iteraciones
-        
-        @show i
-        egoismo = e
-        vehiculos = carros_dos_carriles(ancho,largo,L,d1,d2,n,m; xs = 1/2)
-        
-    D[i] = avance_dos_carril_desplazamiento_promedio_normalizado(pasos,vehiculos,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error ,err)
-        
-     
-     E[i] = e
-        
-     i += 1   
-        
-    end
-    
-    return E,D
-    
-    
-end     
+
     
     
     

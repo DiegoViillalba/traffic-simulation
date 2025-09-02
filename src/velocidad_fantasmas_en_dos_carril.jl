@@ -26,7 +26,7 @@ function ordenar_carriles(carros, en_carril)
 end
 
 """ funcion auxiliar que dado dos autos en el mismo carril nos regresa su separacion """
-function separacion_dos_autos(auto1,auto2,L)
+function separacion_dos_autos(auto1::Auto,auto2::Auto,L)
     # auto 2 es el del frente
     # Largo del carril
     y1 = auto1.posicion[2]
@@ -180,6 +180,7 @@ end
 """ Dado la velocidad pre actualizada del carro vemos si esta es negativa o supera el limite de velocidad dependiendo el caso cambiamos una nueva velocidad que se adapte a las reglas establecidas si no se queda igual a la pre actualizada"""
 
 function cond_vel_sup_in_f(δt,d_0,α,μ,g,T_reac,v_1,sep_fantasmas_1,colchon,fantasmas_1,j,k,v_max,v_min)
+    
     if fantasmas_1[j].velocidad[2] > v_max
             
         condicion_cambio_velocidad_limite_superior_f(δt,d_0,α,μ,g,T_reac,v_1,sep_fantasmas_1,colchon,fantasmas_1,j,k,v_max)

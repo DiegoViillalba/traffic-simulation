@@ -241,13 +241,37 @@ end
 function limites_auto_carril(vocho::Auto,L)
     
  if vocho.posicion[2]>L
-            vocho.posicion[2] = vocho.posicion[2] - L
-            vocho.esquinas[1] = [vocho.esquinas[1][1],vocho.esquinas[1][2] - L ]
-            vocho.esquinas[2] = [vocho.esquinas[2][1],vocho.esquinas[2][2] - L ]
-            vocho.esquinas[3] = [vocho.esquinas[3][1],vocho.esquinas[3][2] - L ]
-            vocho.esquinas[4] = [vocho.esquinas[4][1],vocho.esquinas[4][2] - L ]
+            desplazamiento = -L
+        
+        # Actualizar posición Y
+        vocho.posicion = [vocho.posicion[1], vocho.posicion[2] + desplazamiento]
+        
+        # Vectorizar la actualización de esquinas
+        for i in 1:4
+            vocho.esquinas[i] = [vocho.esquinas[i][1], vocho.esquinas[i][2] + desplazamiento]
+        end
     end
     
+end
+    
+""" Regresa el auto si se pasa de una distancia L (largo del carril)"""
+
+function limites_auto_carril!(vocho::Auto,L)
+    
+ if vocho.posicion[2]>L
+            desplazamiento = -L
+        
+        # Actualizar posición Y
+        vocho.posicion = [vocho.posicion[1], vocho.posicion[2] + desplazamiento]
+        
+        # Vectorizar la actualización de esquinas
+        for i in 1:4
+            vocho.esquinas[i] = [vocho.esquinas[i][1], vocho.esquinas[i][2] + desplazamiento]
+        end
+            
+            return true
+    end
+    return false
 end
 
 
