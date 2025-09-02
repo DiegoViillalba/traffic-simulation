@@ -1,5 +1,13 @@
 # 🚦 Simulación de Tráfico Vehicular con Cambio de Carriles
 
+## 📦 Dependencias
+
+Asegúrate de tener instalados estos paquetes de Julia:
+
+```julia
+using Pkg
+Pkg.add(["Plots", "Statistics", "LinearAlgebra"])
+```
 ## 🚀 Inicio Rápido
 
 Para comenzar una simulación, ejecuta:
