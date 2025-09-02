@@ -16,7 +16,7 @@ end
 """
 Funcion que con carros de un solo carril, calcula toda las separaciones de los carros esta vez incluimos los extremos.
 """
-function condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n)
+function condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n,L)
     if i == n
             if Y[1] > Y[i]
                 δx[i] = Y[1] - Y[i] - l
@@ -31,7 +31,7 @@ end
 """
 Funcion que en un carros distribuidos en dos carriles, calcula la separacion de los carros en el segundo carril, donde los carros en el segundo carril sus indies cumplen que n<i<=p, ya que n son los carros en el primer carril.
 """
-function condiciones_en_la_separacion_2do_carril(δx,Y,l,i,n,p)
+function condiciones_en_la_separacion_2do_carril(δx,Y,l,i,n,p,L)
     if i == p
         if Y[n+1] > Y[i]
             δx[i] = Y[n+1] - Y[i] - l
@@ -53,7 +53,7 @@ function separacion_en_y(carros, L)
     δx = zeros(length(carros))
     n= length(carros)
     for i in 1:length(carros)
-       condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n)
+       condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n,L)
     end
     return δx
 end
@@ -70,9 +70,9 @@ function separacion_en_y_doscarriles(carros, L,n,m)
     δx = zeros(length(carros))
     for i in 1:length(carros)
         if 1 <= i <= n
-            condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n)
+            condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n,L)
         elseif n < i <= p
-            condiciones_en_la_separacion_2do_carril(δx,Y,l,i,n,p)
+            condiciones_en_la_separacion_2do_carril(δx,Y,l,i,n,p,L)
         end
     end
     return δx
