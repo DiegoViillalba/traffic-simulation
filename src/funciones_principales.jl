@@ -5,7 +5,7 @@ Y=arreglo que contiene solo las posiciones de los carros
 l=largo del carro
 i=indice de cada carro
 """
-function condicion_basica_en_separacion(δx,Y,l,i)
+function condicion_basica_en_separacion(δx,Y,l,i,L)
     if Y[i+1] > Y[i]
         δx[i] =   Y[i+1] - Y[i] - l
     elseif Y[i+1] < Y[i]
@@ -24,7 +24,7 @@ function condiciones_en_la_separacion_1er_carril(δx,Y,l,i,n,L)
                 δx[i] = L - (Y[i]-Y[1]+l) 
             end
         else
-            condicion_basica_en_separacion(δx,Y,l,i)
+            condicion_basica_en_separacion(δx,Y,l,i,L)
         end
 end
 
@@ -39,7 +39,7 @@ function condiciones_en_la_separacion_2do_carril(δx,Y,l,i,n,p,L)
             δx[i] = L - (Y[i]-Y[n+1]+l) 
         end
     else
-        condicion_basica_en_separacion(δx,Y,l,i)
+        condicion_basica_en_separacion(δx,Y,l,i,L)
     end
 end
 
