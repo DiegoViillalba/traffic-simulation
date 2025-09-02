@@ -106,6 +106,9 @@ Para realizar una simulación con animación gráfica, usar:
 avance_carros_general!(pasos, vehiculos, egoismo, δt, L, d_0_1, d_0_2, α, μ, g, T_reac, colchon, acel, v_max, v_min, n, m; error = 1e-2, err = 1e-6,kargs...)
 ```
 **⚠️ IMPORTANTE:** Para una compilación rápida con animación, se recomienda NO usar más de 1000 pasos.
+## 📸 Ejemplo Visual
+
+![Animación de simulación](docs/simulation_example.gif)
 
 ### ⚡ Simulación Rápida (Sin Animación)
 Para avanzar los autos rápidamente sin visualización, usar:
