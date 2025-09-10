@@ -3,11 +3,11 @@ using LinearAlgebra
 Calcula Δθ el movimiento es decir tres puntos que recorrera la esquina del auto sobre la cicunferencia y otros tres puntos de la circunferencia que hace el centro
 """
 function Δθ_derecha(a::Auto,δt,θ1)
-    b = deepcopy(a)
+    b = copia_auto_rapida(a)
     velocidad_angular_carro_correcion!(b,50*δt,θ1)
-    c = deepcopy(b)
+    c = copia_auto_rapida(b)
     velocidad_angular_carro_correcion!(c,50*δt,θ1)
-    d = deepcopy(c)
+    d = copia_auto_rapida(c)
     velocidad_angular_carro_correcion!(d,50*δt,θ1)
     X = [b.esquinas[2],c.esquinas[2],d.esquinas[2]]
     Y = [b.posicion,c.posicion,d.posicion]
@@ -300,7 +300,7 @@ ya teniendo el tiempo de interseccion y yc de interseccion actualizamos la posic
 function fantasmas_encimados_test(yc,tc,δt,lista_carril2,i,j,d_0,L,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     
    pasos =  tc/δt
-   lista_carril2_copia = deepcopy(lista_carril2)
+   lista_carril2_copia = copiar_lista_autos_rapida(lista_carril2)
    
    avance_un_carril(lista_carril2_copia,pasos,d_0,δt,L,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     
@@ -356,7 +356,7 @@ end
 """
 function distancias_segura_ij(a::Auto,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon)
     pasos =  tc/δt
-    lista_carril2_copia = deepcopy(lista_carril2)
+    lista_carril2_copia = copiar_lista_autos_rapida(lista_carril2)
     if yc > L
         y = floor(yc/L)
         yc = yc - y*L
@@ -393,7 +393,7 @@ function decide_cambiar_derecha(a::Auto,lista_carril2,θ1,egoismo,δt,L,d_0,α,�
     #yc,tc, t_de_cambio = posicion_tiempo_fantasma_derecha(a,δt,θ1)
     
     prepasos = 1 # ceil(T_reac / δt)
-    b = deepcopy(a)
+    b = copia_auto_rapida(a)
     velocidad_angular_carro_correcion!(b,prepasos*δt,0)
     yc,tc = b.esquinas[2][2], prepasos*δt 
     

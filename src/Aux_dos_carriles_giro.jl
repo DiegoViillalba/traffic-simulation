@@ -3,22 +3,22 @@ function listas_pregiro(fantasmas_1,fantasmas_2,en_carril)
     
     
         
-    #DERECHA
-        lista_carril2 = Auto[]
-    #IZQUIERDA
-    
-        lista_carril1 = Auto[]
+    n = Int(floor(1/2*length(fantasmas_1)))
+    lista_carril1 = Auto[]
+    lista_carril2 = Auto[]
+    sizehint!(lista_carril1, n)
+    sizehint!(lista_carril2, n)
     
     for i in 1:length(fantasmas_1)
         
         if en_carril[i][2] == true
             
-            push!(lista_carril1, deepcopy(fantasmas_1[i]))
+            push!(lista_carril1, fantasmas_1[i])
         end
             
         if en_carril[i][3] == true
                 
-            push!(lista_carril2, deepcopy(fantasmas_2[i]))
+            push!(lista_carril2, fantasmas_2[i])
                     
         end
         

@@ -16,11 +16,11 @@ function velocidades_test_derecha(lista_carril1,lista_carril2,v_max,a::Auto)
     v2 = velocidad_promedio_y_correcion(lista_carril2,v_max)
     if v1 > v2
         
-        s = true
+        return false
     end
     
-        s = false
-    return s
+        return false
+    
 end
 
 """ comprueba si la velocidad del otro carril es mayor que en donde se encuentra el auto (queremos comprobar que v_derecha < v_izquierda para permitir el cambio)"""
@@ -29,14 +29,16 @@ function velocidades_test_izquierda(lista_carril1,lista_carril2,v_max,a::Auto)
     v1 = velocidad_promedio_y_correcion(lista_carril1,v_max)
     v2 = a.velocidad[2]
     if v2 > v1
-        s = true
+        return false
     end
-        s = false
-    return s
+        return false
+   
 end
 
 """ calcula la separacion que tienen en un instante...""" 
 function condicion_de_separacion_derecha(a::Auto,lista_carril1,lista_carril2,L)
+    
+    if lista_carril2 != []
     
     y1 = a.posicion[2]
     arr1 = [lista_carril1[i].posicion[2] for i in 1:length(lista_carril1)]
@@ -52,10 +54,22 @@ function condicion_de_separacion_derecha(a::Auto,lista_carril1,lista_carril2,L)
     sep2 = separacion_dos_autos(fantasma,lista_carril2[i],L)
     
     return sep1,sep2
+        
+    end
+        
+    y1 = a.posicion[2]
+    arr1 = [lista_carril1[i].posicion[2] for i in 1:length(lista_carril1)]
+    a1,b1 = numeros_cercanos(arr1, y1)
+    i = encontrar_posicion(arr1, a1)
+    sep1 = separacion_dos_autos(a,lista_carril1[i],L)    
+        
+    return sep1,Inf
     
 end
 """ calcula la separacion que tienen en un instante...""" 
 function condicion_de_separacion_izquierda(a::Auto,lista_carril1,lista_carril2,L)
+    
+    if lista_carril1 != []
     
     y1 = a.posicion[2]
     arr1 = [lista_carril2[i].posicion[2] for i in 1:length(lista_carril2)]
@@ -69,8 +83,17 @@ function condicion_de_separacion_izquierda(a::Auto,lista_carril1,lista_carril2,L
     i = encontrar_posicion(arr2, a2)
     fantasma =  Auto(a.ancho,0,[lista_carril1[i].posicion[1],y2],1,a.velocidad)
     sep1 = separacion_dos_autos(fantasma,lista_carril1[i],L)
+        
+        return sep1,sep2
+    end
     
-    return sep1,sep2
+    y1 = a.posicion[2]
+    arr1 = [lista_carril2[i].posicion[2] for i in 1:length(lista_carril2)]
+    a1,b1 = numeros_cercanos(arr1, y1)
+    i = encontrar_posicion(arr1, a1)
+    sep2 = separacion_dos_autos(a,lista_carril2[i],L)
+    
+    return Inf,sep2
     
 end
 
@@ -125,12 +148,11 @@ end
 
 """ funcion que tiene un conjunto de condiciones para permitir el cambio  cual sea el carril """
 function decide_cambiar_general(Autos,i,sep_fantasmas_1,sep_fantasmas_2,lista_carril1,lista_carril2,indice_enfrente_1,indice_enfrente_2,giro_nogiro,θ1,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min)
-
     
     if θ1 < 0 # giro derecha
         
-        test = condicion_giro_enfrente(i,indice_enfrente_1,giro_nogiro)
-        if test
+        test1 = condicion_giro_enfrente(i,indice_enfrente_1,giro_nogiro)
+        if test1
             return false
         end
         sep1,sep2 = condicion_de_separacion_derecha(Autos[i],lista_carril1,lista_carril2,L)
@@ -139,8 +161,8 @@ function decide_cambiar_general(Autos,i,sep_fantasmas_1,sep_fantasmas_2,lista_ca
         
     elseif θ1 >  0 # giro izquierda
         
-        test = condicion_giro_enfrente(i,indice_enfrente_2,giro_nogiro)
-        if test
+        test1 = condicion_giro_enfrente(i,indice_enfrente_2,giro_nogiro)
+        if test1
             return false
         end
             
@@ -204,8 +226,8 @@ end
 """ escojemos la velocidad real del carro dado las dos velocidades de los fantasmas (corregido para dos carriles con giro) """
 function escoje_velocidad_real!(carros,fantasmas_1, fantasmas_2,giro_nogiro,en_carril,i)
     
-        v1 = copy(fantasmas_1[i].velocidad[2])
-        v2 = copy(fantasmas_2[i].velocidad[2])
+        v1 = fantasmas_1[i].velocidad[2]
+        v2 = fantasmas_2[i].velocidad[2]
     
         if giro_nogiro[i] == true 
         
@@ -232,29 +254,35 @@ function ordenar_carriles!(carros, en_carril,giro_nogiro)
     
     posiciones_y = [carros[i].posicion[2] for i in 1:length(carros)]
     
-    # Inicializar listas para los índices de cada carril
+    n = length(carros)
     carril_1 = Int[]
     carril_2 = Int[]
-
-    # Iterar sobre cada carro
-    for i in 1:length(carros)
+    
+    # Pre-asignar memoria
+    sizehint!(carril_1, n)
+    sizehint!(carril_2, n)
+    
+    # Pre-calcular todas las posiciones Y
+    posiciones_y = Vector{Float64}(undef, n)
+    for i in 1:n
+        posiciones_y[i] = carros[i].posicion[2]
+    end
+    
+    # Un solo paso para clasificar
+    for i in 1:n
         if giro_nogiro[i] == true
             push!(carril_1, i)
             push!(carril_2, i)
         else
-            if en_carril[i][2] == true # Si está en el carril 1
-                push!(carril_1, i)
-            end
-            if en_carril[i][3] == true # Si está en el carril 2
-                push!(carril_2, i)
-            end
+            en_carril[i][2] && push!(carril_1, i)
+            en_carril[i][3] && push!(carril_2, i)
         end
     end
-
-    # Ordenar los índices según la posición en el eje "y"
-    sort!(carril_1, by=i -> -posiciones_y[i])  # Orden descendente
+    
+    # Ordenar usando precomputed positions
+    sort!(carril_1, by=i -> -posiciones_y[i])
     sort!(carril_2, by=i -> -posiciones_y[i])
-
+    
     return carril_1, carril_2
 end
 
@@ -263,28 +291,29 @@ function listas_pregiro!(fantasmas_1,fantasmas_2,en_carril,giro_nogiro)
     
     
         
-    #DERECHA
-        lista_carril2 = Auto[]
-    #IZQUIERDA
+    n = Int(floor(1/2*length(fantasmas_1)))
     
-        lista_carril1 = Auto[]
+    lista_carril1 = Auto[]
+    lista_carril2 = Auto[]
+    sizehint!(lista_carril1, n)
+    sizehint!(lista_carril2, n)
     
     for i in 1:length(fantasmas_1)
         
-        if giro_nogiro == true
-            push!(lista_carril1, deepcopy(fantasmas_1[i]))
-            push!(lista_carril2, deepcopy(fantasmas_2[i]))
+        if giro_nogiro[i] == true
+            push!(lista_carril1,  fantasmas_1[i])
+            push!(lista_carril2, fantasmas_2[i])
             
         else
             
             if en_carril[i][2] == true
             
-                push!(lista_carril1, deepcopy(fantasmas_1[i]))
+                push!(lista_carril1, fantasmas_1[i])
             end
             
             if en_carril[i][3] == true
                 
-                push!(lista_carril2, deepcopy(fantasmas_2[i]))
+                push!(lista_carril2, fantasmas_2[i])
                     
             end
         end

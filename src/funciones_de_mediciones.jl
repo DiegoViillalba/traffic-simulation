@@ -11,7 +11,7 @@ function avance_un_carril_valocidades_promedio(vehiculos,ts,d_0,δt,L,α,μ,g,T_
         end
         
         
-        V[t] = 3.5*velocidad_promedio_y(vehiculos)
+        V[t] = velocidad_promedio_y(vehiculos)
     end
     
         return T,V
@@ -30,7 +30,7 @@ function avance_un_carril_valocidades_promedio!(vehiculos,ts,d_0,δt,L,α,μ,g,T
         end
         
         
-        V[t] = 3.5*velocidad_promedio_y(vehiculos)
+        V[t] = velocidad_promedio_y(vehiculos)
     end
     
     plot(T,V;kargs...)
@@ -76,7 +76,7 @@ function avance_dos_carril_valocidades_promedio(pasos,vehiculos,egoismo,δt,L,d_
     
       avance_dos_carriles_con_giro_sin_anim(vehiculos,θ_vec,carriless,carriles_original,giro_nogiro,egoismo,δt,L,d_0_1,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min,n,m;error = 1e-2,err= 1e-6)
         
-       V[t] = 3.5*velocidad_promedio_y(vehiculos)
+       V[t] = velocidad_promedio_y(vehiculos)
     end
     
     return T,V
@@ -169,7 +169,48 @@ function medicion_velocidades_flujo_desplazamiento(pasos, vehiculos, egoismo, δ
 end
 
 
+
+function medicion_un_carril_tiempo_vel_flujo(vehiculos,ts,d_0,δt,L,α,μ,g,T_reac,colchon,acel,v_max,v_min)
+    T = [t * δt for t in 1:ts]
+    V = zeros(ts)
     
+    estimado = length(vehiculos) * ts * 2
+    tiempos_cruce = Vector{Float64}(undef, estimado)
+    count = 0
+            
+    for t in 1:ts
+        
+        for i in 1:length(vehiculos)
+            
+            Sep = separacion_en_y(vehiculos, L)
+            j = length(vehiculos)-i+1
+            v_1 = vehiculos[j].velocidad[2]
+          
+            #calcula la velocidad
+            
+            condicion_cambio_velocidad(δt,d_0,α,μ,g,T_reac,v_1,Sep,colchon,acel,vehiculos,j)
+           
+            # verifica si la velocidad no pasa el limite o se vuelve negativa
+            cond_vel_sup_in(δt,d_0,α,μ,g,T_reac,v_1,Sep,colchon,vehiculos,j,v_max,v_min)
+            
+            #con la velocidad calculamos el nuevo desplazamiento
+            test = actualizar_posicion_un_carril!(vehiculos,δt,L,j)
+            
+            actualizar_esquinas_un_carril(vehiculos,j)
+                    
+            if test
+                count += 1
+                tiempos_cruce[count] = t * δt
+            end
+                        
+            
+        end
+        V[t] = velocidad_promedio_y(vehiculos)
+    end
+     
+    return T, V, tiempos_cruce[1:count]
+    
+end
 
     
     

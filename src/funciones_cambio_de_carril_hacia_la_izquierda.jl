@@ -3,11 +3,11 @@ Calcula Δθ el movimiento es decir tres puntos que recorrera la esquina del aut
 """
 
 function Δθ_izquierda(a::Auto,δt,θ1)
-    b = deepcopy(a)
+    b = copia_auto_rapida(a)
     velocidad_angular_carro_correcion!(b,50*δt,θ1)
-    c = deepcopy(b)
+    c = copia_auto_rapida(b)
     velocidad_angular_carro_correcion!(c,50*δt,θ1)
-    d = deepcopy(c)
+    d = copia_auto_rapida(c)
     velocidad_angular_carro_correcion!(d,50*δt,θ1)
     X = [b.esquinas[1],c.esquinas[1],d.esquinas[1]]
     Y = [b.posicion,c.posicion,d.posicion]
@@ -74,7 +74,7 @@ function decide_cambiar_izquierda(a::Auto,lista_carril2,θ1,egoismo,δt,L,d_0,α
     #yc,tc, t_de_cambio = posicion_tiempo_fantasma_izquierda(a,δt,θ1)
     
     prepasos = 1 #ceil(T_reac / δt)
-    b = deepcopy(a)
+    b = copia_auto_rapida(a)
     velocidad_angular_carro_correcion!(b,prepasos*δt,0)
     yc,tc = b.esquinas[1][2], prepasos*δt  
     

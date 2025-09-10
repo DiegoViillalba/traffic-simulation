@@ -21,6 +21,6 @@ include("funcion_detecta_choque.jl")
 include("avance_carros_dos_carriles_con_giro.jl")
 include("funciones_de_mediciones.jl")
 include("funciones_de_mediciones_2.jl")
-
+include("funciones_de_mediciones_3.jl")
 
 

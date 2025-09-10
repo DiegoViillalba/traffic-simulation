@@ -18,7 +18,7 @@ function carros_largo_cero(pre_carros,auto::Auto, carriless::Array{Carril})
 end
 
 
-""" nos regresa un arreglo de dos carros fantasmas ahora si con carros que oueden tener largo cero """
+""" nos regresa un arreglo de dos carros fantasmas ahora si con carros que pueden tener largo cero """
 
 function carros_fantasmas_2(auto::Auto, carriless::Array{Carril})
     
@@ -26,7 +26,8 @@ function carros_fantasmas_2(auto::Auto, carriless::Array{Carril})
  
     en_carril = carros_i_carriles(pre_carros,carriless)
     n = length(pre_carros)
-    v = copy(auto.velocidad[2])
+    v = auto.velocidad[2]
+    
     if n==1
         
         carros = carros_largo_cero(pre_carros,auto, carriless) 
@@ -55,23 +56,17 @@ end
 """ Dado una lasta de carros crea la lista de los fantasmas correspondiente a cada carril es decir dos arreglos para cada carril"""
 
 function listas_carros_fantasmas(carros)
-    fantasmas_1 = Auto[]
-    fantasmas_2 = Auto[]
+    n = length(carros)
+    fantasmas_1 = Vector{Auto}(undef, n)  # Pre-asignar tamaño exacto
+    fantasmas_2 = Vector{Auto}(undef, n)  # Pre-asignar tamaño exacto
     
-    for i in 1:length(carros)
-        
-        fantasmas = carros_fantasmas_2(carros[i], carriles(1,2))
-
-        
-        
-        push!(fantasmas_1, fantasmas[1])
-        push!(fantasmas_2, fantasmas[2])
-        
-        
-        
+    for i in 1:n
+        fantasmas = carros_fantasmas_2(carros[i], carriles(1, 2))
+        fantasmas_1[i] = fantasmas[1]
+        fantasmas_2[i] = fantasmas[2]
     end
     
-    return fantasmas_1, fantasmas_2 
+    return fantasmas_1, fantasmas_2
     
 end
 

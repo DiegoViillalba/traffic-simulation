@@ -61,6 +61,18 @@ function actualizar_posicion_un_carril(vehiculos,δt,L,j)
     end
 end
 
+function actualizar_posicion_un_carril!(vehiculos,δt,L,j)
+    δx = vehiculos[j].velocidad[2]*δt
+    vehiculos[j].posicion[2] = vehiculos[j].posicion[2] + δx
+    
+    if vehiculos[j].posicion[2]>L
+        test = true
+        vehiculos[j].posicion[2] = vehiculos[j].posicion[2] - L
+        return test
+    end
+    return false
+end
+
 function actualizar_esquinas_un_carril(vehiculos,j)
     for i in 1:4
         vehiculos[j].esquinas = [[vehiculos[j].posicion[1]-vehiculos[j].ancho/2,vehiculos[j].posicion[2]+vehiculos[j].largo/2],[vehiculos[j].posicion[1]+vehiculos[j].ancho/2,vehiculos[j].posicion[2]+vehiculos[j].largo/2],[vehiculos[j].posicion[1]+vehiculos[j].ancho/2,vehiculos[j].posicion[2]-vehiculos[j].largo/2],[vehiculos[j].posicion[1]-vehiculos[j].ancho/2,vehiculos[j].posicion[2]-vehiculos[j].largo/2]]

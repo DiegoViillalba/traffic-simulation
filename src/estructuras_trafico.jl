@@ -64,4 +64,30 @@ function mod(a::Auto, x)
         return b, false
     end
 end
-        
+
+
+function copia_auto_rapida(auto::Auto)
+    # Crear nuevo Auto reutilizando algunos campos
+    nuevo_auto = Auto(
+        auto.ancho,
+        auto.largo,
+        copy(auto.posicion),      # Solo copiar lo necesario
+        [copy(esquina) for esquina in auto.esquinas],#deepcopy(auto.esquinas),  # deepcopy solo para arrays complejos
+        copy(auto.velocidad),
+        copy(auto.direccion),
+        auto.color,               # Inmutable, no necesita copy
+        auto.indice
+    )
+    return nuevo_auto
+end
+
+
+function copiar_lista_autos_rapida(lista_autos::Vector{Auto})
+    nueva_lista = Vector{Auto}(undef, length(lista_autos))
+    
+    for i in eachindex(lista_autos)
+        nueva_lista[i] = copia_auto_rapida(lista_autos[i])
+    end
+    
+    return nueva_lista
+end

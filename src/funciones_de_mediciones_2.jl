@@ -225,10 +225,10 @@ end
 
 
 """ Función para simular y guardar todos los datos"""
-function simular_y_guardar(pasos, egoismo,ancho, largo, d1, d2, δt, L, d_0_1, d_0_2, α, μ, g, T_reac, colchon, acel, v_max, v_min,n, m;
+function simular_y_guardar(pasos, egoismo,ancho, largo, δt, L, d_0_1, d_0_2, α, μ, g, T_reac, colchon, acel, v_max, v_min,n_total;
         tol=1e-2, err= 1e-6)
 
-    vehiculos = carros_dos_carriles(ancho,largo,L,d1,d2,n,m; xs = 1/2)
+    vehiculos,n,m = generar_distribucion_automatica(n_total, d_0_1, largo, ancho, L)
     
     # Ejecutar simulación
     T, V, tiempos_cruce, desplazamiento, desplazamiento_y = medicion_velocidades_flujo_desplazamiento(
@@ -236,9 +236,9 @@ function simular_y_guardar(pasos, egoismo,ancho, largo, d1, d2, δt, L, d_0_1, d
         error=tol, err=err)
     
     # Guardar todos los datos
-    guardarVelocidadesTiempos(T, V, (n+m)/L, egoismo)
-    guardarTiemposFlujo(tiempos_cruce, (n+m)/L, egoismo)
-    guardardesplazamientoTiempos(T, desplazamiento,desplazamiento_y, (n+m)/L, egoismo)
+    guardarVelocidadesTiempos(T, V, (n_total*(largo+d_0_1))/(2*L) , egoismo)
+    guardarTiemposFlujo(tiempos_cruce, (n_total*(largo+d_0_1))/(2*L), egoismo)
+    guardardesplazamientoTiempos(T, desplazamiento,desplazamiento_y, (n_total*(largo+d_0_1))/(2*L) , egoismo)
     
     return T, V, tiempos_cruce, desplazamiento, desplazamiento_y
 end
