@@ -16,7 +16,7 @@ mutable struct Carril
     indice_carril ::Int64
 end
 
-#### esta no sé para qué sirve ### Checar en las funciones principales
+
 function Carril(ancho_carril::Union{Float64,Int64},inicio_fin::Vector{Float64},posicion::Vector{Float64},indice_carril::Int64)
     carril(ancho_carril,inicio_fin,indice_carril)
 end
