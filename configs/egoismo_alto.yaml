@@ -1,0 +1,47 @@
+# configs/egoismo_alto.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Experimento: Impacto del egoísmo alto en el cambio de carril
+# Compara la velocidad promedio con conductores agresivos (egoismo → 1).
+# ─────────────────────────────────────────────────────────────────────────────
+
+experimento:
+  nombre: "egoismo_alto"
+  descripcion: "Conductores altamente egoístas: bloquean menos cambios de carril"
+  tipo: "velocidades"
+
+vehiculos:
+  n: 20
+  m: 15
+  ancho: 0.5142857142857143
+  largo: 1.2857142857142858
+
+carretera:
+  L: 100.0
+  d_0_1: 0.5
+  d_0_2: 0.5
+
+fisica:
+  alpha: 0.8
+  mu: 0.8
+  g: 2.803
+  T_reac: 1.0
+  acel: 1.0
+  colchon: 0.21
+  v_max: 4.0
+  v_min: 0.001
+
+comportamiento:
+  egoismo: 0.98              # conductores muy egoístas (casi no ceden el paso)
+
+simulacion:
+  pasos: 400
+  dt: 0.1
+  benchmark_pasos_sat: 50
+  benchmark_pasos_paso: 10
+  error: 1.0e-2
+  err: 1.0e-6
+
+resultados:
+  guardar_velocidades: true
+  guardar_benchmarks: false
+  guardar_csv: true

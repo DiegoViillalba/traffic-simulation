@@ -1,3 +1,6 @@
+using LinearAlgebra: norm
+using Plots.Colors: RGB
+
 mutable struct Auto
     ancho ::Union{Float64,Int64}
     largo ::Union{Float64,Int64}
@@ -7,7 +10,6 @@ mutable struct Auto
     direccion ::Vector{Float64}
     color ::RGB
     indice ::Int64
-    #carril_inicial ::Int64 #solo usable para dos carriles
 end
 
 mutable struct Carril
@@ -16,12 +18,9 @@ mutable struct Carril
     indice_carril ::Int64
 end
 
-
 function Carril(ancho_carril::Union{Float64,Int64},inicio_fin::Vector{Float64},posicion::Vector{Float64},indice_carril::Int64)
     carril(ancho_carril,inicio_fin,indice_carril)
 end
-
-
 
 function Auto(ancho::Union{Float64,Int64},largo::Union{Float64,Int64},posicion::Vector{Float64},indice::Int64,)
     esquinas = [[posicion[1]-ancho/2,posicion[2]+largo/2],[posicion[1]+ancho/2,posicion[2]+largo/2],[posicion[1]+ancho/2,posicion[2]-largo/2],[posicion[1]-ancho/2,posicion[2]-largo/2]]
@@ -65,29 +64,24 @@ function mod(a::Auto, x)
     end
 end
 
-
 function copia_auto_rapida(auto::Auto)
-    # Crear nuevo Auto reutilizando algunos campos
     nuevo_auto = Auto(
         auto.ancho,
         auto.largo,
-        copy(auto.posicion),      # Solo copiar lo necesario
-        [copy(esquina) for esquina in auto.esquinas],#deepcopy(auto.esquinas),  # deepcopy solo para arrays complejos
+        copy(auto.posicion),
+        [copy(esquina) for esquina in auto.esquinas],
         copy(auto.velocidad),
         copy(auto.direccion),
-        auto.color,               # Inmutable, no necesita copy
+        auto.color,
         auto.indice
     )
     return nuevo_auto
 end
 
-
 function copiar_lista_autos_rapida(lista_autos::Vector{Auto})
     nueva_lista = Vector{Auto}(undef, length(lista_autos))
-    
     for i in eachindex(lista_autos)
         nueva_lista[i] = copia_auto_rapida(lista_autos[i])
     end
-    
     return nueva_lista
 end

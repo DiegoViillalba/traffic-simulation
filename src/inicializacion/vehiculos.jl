@@ -1,12 +1,8 @@
+using LinearAlgebra: norm
+
 """
 carros(a,l,L,Δx,n; xs = 1/2)
 acomoda n autos en una carretera de largo L, separando los autos Δx, el primero lo pone en la posicion l/2.
-a = ancho de carro
-l= largo de carro
-L = largo de carretera
-Δx = sepracion de carros
-n = numero de coches
-xs = posición en x del carril
 """
 function carros(a,l,L,Δx,n;xs = 1/2)
     if n*l+(n-1)*Δx > L
@@ -17,18 +13,16 @@ function carros(a,l,L,Δx,n;xs = 1/2)
     return carros
 end
 
-
 """
 carriles(A,N)
 construye N carriles de ancho A
-A=ancho de carril
-N=NUMERO DE CARRILES QUE SE QUIERE
 """
 carriles(A,N) = [Carril(A,[A*(i-1),A*i],i) for i in 1:N]
 
 """
 carros_i_carriles(carros,carriles)
-arroja un arreglo de arreglos, donde el primer elemento de cada arreglo es el índice del auto, y los demás son true o false, dependiendo de si el auto se encuentra o no en el carril. 
+arroja un arreglo de arreglos, donde el primer elemento de cada arreglo es el índice del auto,
+y los demás son true o false, dependiendo de si el auto se encuentra o no en el carril.
 """
 function carros_i_carriles(carros::Array{Auto},carriles::Array{Carril})
     esquinasx = [[carros[i].esquinas[j][1] for j in 1:4]  for i in 1:length(carros)]
@@ -44,16 +38,7 @@ end
 
 """
 carros_dos_carriles(a,l,L,Δx,Δx1,n,m; xs = 1/2)
-acomoda n autos en una carretera de largo L, separando los autos Δx, el primero lo pone en la posicion [1/2,l/2].
-despues acomoda m autos en una carretera de largo L, separados Δx2, el primero lo pone en la posición  [1/2+a*1.5,l/2]
-L = largo de carretera
-a = ancho de carro
-l= largo de carro
-Δx = sepracion de carros en carril 1
-Δx1 = sepracion de carros en carril 2
-n = numero de coches en carril 1
-m = numero de coches en carril 2
-xs = posicion en x del primer carril
+acomoda n autos en carril 1 y m autos en carril 2.
 """
 function carros_dos_carriles(a,l,L,Δx,Δx1,n,m; xs = 1/2)
     carros0 = carros(a,l,L,Δx,n, xs = xs)
@@ -63,7 +48,7 @@ end
 
 """
 rotacion_carro!(θ,a::Auto)
-rota a un ángulo θ, es decir, rota tanto las esquinas, como la dirección. 
+rota a un ángulo θ, es decir, rota tanto las esquinas, como la dirección.
 """
 function rotacion_carro!(θ,a::Auto)
     T = [cos(θ) -sin(θ);sin(θ) cos(θ)]
@@ -78,7 +63,7 @@ end
 
 """
 actualiza_v!(a::Auto, v)
-actualiza la velocidad y dirección del automovil. 
+actualiza la velocidad y dirección del automovil.
 """
 function actualiza_v!(a::Auto, v)
     v0 = copy(a.direccion)
@@ -95,9 +80,8 @@ function actualiza_v!(a::Auto, v)
 end
 
 """
-velocidad_angular_carro!(a::Auto,t,θ,v)
-actualiza la velocidad y posición de a. La velocidad la calcula con θ como el ángulo y v su norma. 
-la posición la actualiza poniendo moviendo a con su nueva velocidad un tiempo t. 
+velocidad_angular_carro!(a::Auto,t,θ1)
+actualiza la velocidad y posición de a usando movimiento angular.
 """
 function velocidad_angular_carro!(a::Auto,t,θ1)
     θ0 = atan(a.direccion[2],a.direccion[1])
@@ -110,7 +94,6 @@ function velocidad_angular_carro!(a::Auto,t,θ1)
     x = L-cos(θ)*v*t - sqrt(L^2 -sin(θ)^2*v^2 * t^2)
     front .+= v*t*[cos(θ2), sin(θ2)] 
     back .+= x*a.direccion
-    
     dx = (front+back)./2 .-a.posicion
     a + dx
     vnew = v*(front - back)./L
@@ -129,7 +112,6 @@ function velocidad_angular_carro_correcion!(a::Auto,t,θ1)
     x = L - cos(θ)*v*t - sqrt(L^2 -sin(θ)^2*v^2 * t^2)
     front .+= x*a.direccion
     back .+= v*t*[cos(θ2), sin(θ2)]
-    
     dx = (front+back)./2 .-a.posicion
     a + dx
     vnew = v*(front - back)./L
@@ -139,8 +121,7 @@ end
 
 """
 maximo_giro(auto::Auto)
-El máximo ángulo de giro permitido. Depende únicamente de la norma de la velocidad del automovil. 
-Esta función hay que revisarla con cuidado. 
+El máximo ángulo de giro permitido. Depende de la norma de la velocidad del automovil.
 """
 function maximo_giro(auto::Auto)
     v = norm(auto.velocidad)
@@ -184,16 +165,17 @@ function calcula_intersección_auto_carril(auto::Auto, carriless::Array{Carril})
     if length(x_int) == 0
         return I, [], es_s
     end
-    
     ps = [intersecta_rectangulo(auto.esquinas, x) for x in x_int]
     return I, ps, [e[es] for es in es_s]
 end  
+
 function min_max(es)
     ey = [es[i][2] for i in 1:length(es)]
     ymin = minimum(ey)
     ymax = maximum(ey)
     return [ymin,ymax]
 end
+
 function obten_min_max(auto::Auto, carriless::Array{Carril})
     I, ps, es = calcula_intersección_auto_carril(auto, carriless)
     if length(ps) != 0
@@ -212,25 +194,21 @@ function obten_min_max(auto::Auto, carriless::Array{Carril})
         return I, [interval]
     end  
 end  
+
 """
-carros_fantasmas(auto::Auto,carriless::Array{Carril})
-genera los autos fantasma en la dirección del carril. 
+carros_fantasmas(auto::Auto, carriless::Array{Carril})
+genera los autos fantasma en la dirección del carril.
 """
 function carros_fantasmas(auto::Auto, carriless::Array{Carril})
     I, intervals = obten_min_max(auto, carriless)
     fantasmas_t = Auto[]
     for i in 1:length(I)
-     
-            a_fantasma = Auto(auto.ancho, intervals[i][2]-intervals[i][1],[sum(carriless[I[i]].inicio_fin)/2,(intervals[i][2]+intervals[i][1])/2], 0)
-       
+        a_fantasma = Auto(auto.ancho, intervals[i][2]-intervals[i][1],[sum(carriless[I[i]].inicio_fin)/2,(intervals[i][2]+intervals[i][1])/2], 0)
         a_fantasma.velocidad = [0,auto.velocidad[2]]
         a_fantasma.color = auto.color
         push!(fantasmas_t, a_fantasma)
     end
     return fantasmas_t
 end 
-    
+
 ########## termina función carros_fantasma #########
-
-
-

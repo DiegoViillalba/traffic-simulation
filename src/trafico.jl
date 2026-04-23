@@ -1,26 +1,49 @@
+"""
+trafico.jl — Punto de entrada de la simulación de tráfico vehicular.
+
+Carga todos los módulos en el orden correcto de dependencias:
+  core → inicializacion → visualizacion → fantasmas →
+  simulacion/un_carril → cambio_carril → simulacion/dos_carriles →
+  utils → mediciones
+"""
+
 using Plots
-using LinearAlgebra
 using Plots.PlotMeasures
+using LinearAlgebra
 using Statistics
 using LaTeXStrings
 
-include("estructuras_trafico.jl")
-include("funciones_iniciales.jl")
-include("funciones_dibujo.jl")
-include("funciones_principales.jl")
-include("avance_en_un_carril.jl")
-include("fantasmas_dos_carriles.jl")
-include("velocidad_fantasmas_en_dos_carril.jl")
-include("avance_carros_dos_carriles_sin_giro.jl")
-include("funciones_extras.jl")
-include("funciones_cambio_de_carril_hacia_la_derecha.jl")
-include("funciones_cambio_de_carril_hacia_la_izquierda.jl")
-include("Aux_dos_carriles_giro.jl")
-include("Aux_dos_carriles_giro_2.jl")
-include("funcion_detecta_choque.jl")
-include("avance_carros_dos_carriles_con_giro.jl")
-include("funciones_de_mediciones.jl")
-include("funciones_de_mediciones_2.jl")
-include("funciones_de_mediciones_3.jl")
+# ── Core: estructuras de datos y física base ──────────────────────────────────
+include("core/estructuras.jl")
+include("core/fisica.jl")
 
+# ── Inicialización: construcción de autos y carriles ─────────────────────────
+include("inicializacion/vehiculos.jl")
 
+# ── Visualización: plot(Auto), plot!(Vector{Auto}) ────────────────────────────
+include("visualizacion/dibujo.jl")
+
+# ── Fantasmas: proyección por carril y velocidades ────────────────────────────
+include("fantasmas/creacion.jl")
+include("fantasmas/velocidad.jl")
+
+# ── Simulación un carril (debe estar antes de cambio_carril por egoismo_velocidad) ──
+include("simulacion/un_carril.jl")
+
+# ── Cambio de carril: geometría, estado de giro y decisión ───────────────────
+include("cambio_carril/geometria.jl")
+include("cambio_carril/angulos.jl")
+include("cambio_carril/decision.jl")
+
+# ── Simulación dos carriles ───────────────────────────────────────────────────
+include("simulacion/dos_carriles_sin_giro.jl")
+include("simulacion/colisiones.jl")
+include("simulacion/dos_carriles.jl")
+
+# ── Utilidades: egoísmo y distribución de autos ───────────────────────────────
+include("utils/distribucion.jl")
+
+# ── Mediciones: velocidades, análisis y exportación CSV ──────────────────────
+include("mediciones/velocidades.jl")
+include("mediciones/analisis.jl")
+include("mediciones/exportacion.jl")

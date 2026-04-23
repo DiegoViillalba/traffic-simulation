@@ -1,0 +1,47 @@
+# configs/benchmark_rapido.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Experimento: Benchmark rápido de rendimiento
+# Útil para diagnóstico de cuellos de botella con pocos vehículos.
+# ─────────────────────────────────────────────────────────────────────────────
+
+experimento:
+  nombre: "benchmark_rapido"
+  descripcion: "Benchmark de rendimiento con pocos vehículos para diagnóstico rápido"
+  tipo: "benchmark"          # benchmark | velocidades | flujo | desplazamiento
+
+vehiculos:
+  n: 20                      # autos en carril 1
+  m: 15                      # autos en carril 2
+  ancho: 0.5142857142857143  # 18/35  [unidades de simulación]
+  largo: 1.2857142857142858  # 9/7    [unidades de simulación]
+
+carretera:
+  L: 50.0                    # longitud del carril [unidades de simulación]
+  d_0_1: 0.5                 # distancia mínima de seguridad carril 1
+  d_0_2: 0.5                 # distancia mínima de seguridad carril 2
+
+fisica:
+  alpha: 0.8                 # coeficiente de resistencia aerodinámica
+  mu: 0.8                    # coeficiente de fricción
+  g: 2.803                   # gravedad efectiva de simulación
+  T_reac: 1.0                # tiempo de reacción del conductor [pasos]
+  acel: 1.0                  # aceleración base
+  colchon: 0.21              # margen de seguridad adicional
+  v_max: 4.0                 # velocidad máxima [u/paso]
+  v_min: 0.001               # velocidad mínima [u/paso]
+
+comportamiento:
+  egoismo: 0.8               # factor de egoísmo (0=altruista, 1=egoísta)
+
+simulacion:
+  pasos: 200                 # número de pasos temporales
+  dt: 0.1                    # tamaño del paso temporal [s]
+  benchmark_pasos_sat: 100   # repeticiones para benchmark SAT
+  benchmark_pasos_paso: 20   # repeticiones para benchmark de paso completo
+  error: 1.0e-2              # tolerancia numérica de giro
+  err: 1.0e-6                # tolerancia de dirección
+
+resultados:
+  guardar_velocidades: true
+  guardar_benchmarks: true
+  guardar_csv: false         # no guardar CSV en benchmark rápido

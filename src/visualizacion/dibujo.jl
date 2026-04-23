@@ -1,4 +1,5 @@
 import Plots.plot, Plots.plot!
+using Plots.Colors: RGB
 
 #### funciones pre-eliminares ######
 
@@ -65,7 +66,6 @@ function ventanas_d(a::Auto, p1_1,p1_2, p2_1, p2_2, t2_1, t2_2, c, d)
     v_x = [v1_1,v1_1,v1_2,v1_2,v1_1]
     v_y = [v2_1,v2_2,v2_3,v2_4,v2_1]
     v_x, v_y = rotate_datos(v_x, v_y, centro, θ)
-    #ventanas2
     b1_1 = p1_1 
     b1_2 = p1_1 + 0.1*c   
     b_x = [b1_2,b1_1,b1_1,b1_2,b1_2] 
@@ -90,10 +90,8 @@ end
 ### funciones importantes
     
 """
-plot!(a, kargs...) the auto a. kargs:  
-vidrios = true
-faros = true 
-and usual plot kargs, exept for color, and fill. 
+plot!(a, kargs...) dibuja el auto a.
+kargs: vidrios = true, faros = true, y kargs usuales de plot excepto color y fill.
 """
 function plot!(a::Auto; vidrios = true, faros = true, kargs...)
     kargs2 = kargs_reducidos(;kargs...)
@@ -101,11 +99,11 @@ function plot!(a::Auto; vidrios = true, faros = true, kargs...)
     plot!(x,y,fill=true,color = a.color;kargs...)
     if vidrios
         c,d, p1_1, p1_2, p2_1, p2_2,p_x, p_y = parabrisas_d(a)
-        plot!(p_x,p_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)        #parabrisas delantero
+        plot!(p_x,p_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)
         t1_1,t1_2,t2_1,t2_2, t_x, t_y = parabrisas_trasero_d(a, c,d)
-        plot!(t_x,t_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)         #parabrisas trasero
+        plot!(t_x,t_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)
         v_x, v_y, b_x, b_y = ventanas_d(a, p1_1,p1_2, p2_1, p2_2, t2_1, t2_2, c, d)
-        plot!(v_x,v_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)         #ventanas
+        plot!(v_x,v_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)
         plot!(b_x,b_y,fill=true,color = RGB(0,0,0.5),label=false; kargs2...)
     end 
     if faros
@@ -119,10 +117,7 @@ function plot!(a::Auto; vidrios = true, faros = true, kargs...)
 end
 
 """
-plot(a, kargs...) the auto a. kargs:  
-vidrios = true
-faros = true 
-and usual plot kargs, exept for color, and fill. 
+plot(a, kargs...) dibuja el auto a.
 """
 function plot(a::Auto; vidrios = true, faros = true, kargs...)
     plot()
@@ -130,10 +125,7 @@ function plot(a::Auto; vidrios = true, faros = true, kargs...)
 end
 
 """
-plot(cars, kargs...) the array of cars. kargs:  
-vidrios = true
-faros = true 
-and usual plot kargs, exept for color, label, and fill. 
+plot(cars, kargs...) dibuja un arreglo de autos.
 """
 function plot(carros::Vector{Auto};vidrios = true, faros = true, kargs...)
     plot()
@@ -144,10 +136,7 @@ function plot(carros::Vector{Auto};vidrios = true, faros = true, kargs...)
 end
 
 """
-plot!(cars, kargs...) the array of cars. kargs:  
-vidrios = true
-faros = true 
-and usual plot kargs, exept for color, label, and fill. 
+plot!(cars, kargs...) dibuja un arreglo de autos sobre el plot actual.
 """
 function plot!(carros::Vector{Auto};vidrios = true, faros = true,kargs...)
     for i in 1:length(carros)
@@ -156,35 +145,14 @@ function plot!(carros::Vector{Auto};vidrios = true, faros = true,kargs...)
     plot!()
 end
 
-
-""" grafica vector noemalizado"""
-function graficar_vector_normalizado!(vector::Vector{Float64}, centro::Vector{Float64}; 
-                                    kargs...)
-    """
-    Grafica un vector normalizado centrado en un punto dado.
-    
-    Parámetros:
-    - vector: Vector normalizado (debe tener norma 1)
-    - centro: Punto [x, y] donde se centrará el vector
-    - color: Color del vector (opcional)
-    - ancho_flecha: Ancho de la cabeza de flecha (opcional)
-    - etiqueta: Etiqueta para la leyenda (opcional)
-    """
-    
-    # Verificar que el vector esté normalizado (con tolerancia numérica)
+""" grafica vector normalizado """
+function graficar_vector_normalizado!(vector::Vector{Float64}, centro::Vector{Float64}; kargs...)
     norma = sqrt(sum(vector.^2))
     if !isapprox(norma, 1.0, atol=1e-5)
         @warn "El vector proporcionado no está normalizado (norma = $norma). Se normalizará automáticamente."
         vector = vector ./ norma
     end
-    
-    # Calcular punto final del vector
     punto_final = centro .+ vector
-    
-    # Crear gráfico
-    plot!([centro[1], punto_final[1]], [centro[2], punto_final[2]]; 
-                                    kargs...)
-    
-    # Marcar el punto central
+    plot!([centro[1], punto_final[1]], [centro[2], punto_final[2]]; kargs...)
     scatter!([centro[1]], [centro[2]], color=:red, key = false)
 end

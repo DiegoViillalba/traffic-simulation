@@ -1,5 +1,4 @@
-""" funcion que crea un carro de longitud cero cuando pre carros solo tiene un elemento con esto obtemos los autos fantasmas correctos"""
-
+""" funcion que crea un carro de longitud cero cuando pre_carros solo tiene un elemento """
 function carros_largo_cero(pre_carros,auto::Auto, carriless::Array{Carril})
     en_carril = carros_i_carriles(pre_carros,carriless)
     
@@ -17,48 +16,34 @@ function carros_largo_cero(pre_carros,auto::Auto, carriless::Array{Carril})
     return carros
 end
 
-
-""" nos regresa un arreglo de dos carros fantasmas ahora si con carros que pueden tener largo cero """
-
+""" nos regresa un arreglo de dos carros fantasmas con largo cero si es necesario """
 function carros_fantasmas_2(auto::Auto, carriless::Array{Carril})
-    
     pre_carros = carros_fantasmas(auto, carriless)
- 
     en_carril = carros_i_carriles(pre_carros,carriless)
     n = length(pre_carros)
     v = auto.velocidad[2]
     
     if n==1
-        
         carros = carros_largo_cero(pre_carros,auto, carriless) 
-        
-          
         carros[1].velocidad[2] = v
         carros[1].velocidad[1] = 0
         carros[2].velocidad[2] = v
         carros[2].velocidad[1] = 0
-        
         return carros
     else
-        
-        
-        
         pre_carros[1].velocidad[2] = v
         pre_carros[1].velocidad[1] = 0
         pre_carros[2].velocidad[2] = v
         pre_carros[2].velocidad[1] = 0
-       
         return pre_carros
     end
-    
 end
 
-""" Dado una lasta de carros crea la lista de los fantasmas correspondiente a cada carril es decir dos arreglos para cada carril"""
-
+""" Dado una lista de carros crea la lista de fantasmas correspondiente a cada carril """
 function listas_carros_fantasmas(carros)
     n = length(carros)
-    fantasmas_1 = Vector{Auto}(undef, n)  # Pre-asignar tamaño exacto
-    fantasmas_2 = Vector{Auto}(undef, n)  # Pre-asignar tamaño exacto
+    fantasmas_1 = Vector{Auto}(undef, n)
+    fantasmas_2 = Vector{Auto}(undef, n)
     
     for i in 1:n
         fantasmas = carros_fantasmas_2(carros[i], carriles(1, 2))
@@ -67,8 +52,4 @@ function listas_carros_fantasmas(carros)
     end
     
     return fantasmas_1, fantasmas_2
-    
 end
-
-
-
