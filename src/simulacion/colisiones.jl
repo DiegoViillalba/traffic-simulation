@@ -4,7 +4,7 @@ using LinearAlgebra: dot
 # SAT primitivas (sin cambios)
 # ─────────────────────────────────────────────────────────────────────────────
 
-function proyectarEnEje(esquinas::Vector{Any}, eje::Vector{Float64})
+function proyectarEnEje(esquinas::Vector{Vector{Float64}}, eje::Vector{Float64})
     min_proj = Inf
     max_proj = -Inf
     for e in esquinas
@@ -19,7 +19,7 @@ function intervalosSeSuperponen(a_min::Float64, a_max::Float64, b_min::Float64, 
     return !(a_max < b_min || b_max < a_min)
 end
 
-function obtenerEjes(esquinas::Vector{Any})
+function obtenerEjes(esquinas::Vector{Vector{Float64}})
     n = length(esquinas)
     ejes = Vector{Vector{Float64}}(undef, n)
     for i in 1:n

@@ -57,10 +57,15 @@ function actualizar_posicion_un_carril!(vehiculos,δt,L,j)
     return false
 end
 
-function actualizar_esquinas_un_carril(vehiculos,j)
-    for i in 1:4
-        vehiculos[j].esquinas = [[vehiculos[j].posicion[1]-vehiculos[j].ancho/2,vehiculos[j].posicion[2]+vehiculos[j].largo/2],[vehiculos[j].posicion[1]+vehiculos[j].ancho/2,vehiculos[j].posicion[2]+vehiculos[j].largo/2],[vehiculos[j].posicion[1]+vehiculos[j].ancho/2,vehiculos[j].posicion[2]-vehiculos[j].largo/2],[vehiculos[j].posicion[1]-vehiculos[j].ancho/2,vehiculos[j].posicion[2]-vehiculos[j].largo/2]]
-    end
+function actualizar_esquinas_un_carril(vehiculos, j)
+    x, y = vehiculos[j].posicion[1], vehiculos[j].posicion[2]
+    hw, hl = vehiculos[j].ancho/2, vehiculos[j].largo/2
+    vehiculos[j].esquinas = [
+        [x - hw, y + hl],
+        [x + hw, y + hl],
+        [x + hw, y - hl],
+        [x - hw, y - hl]
+    ]
 end
 
 """ Calcula las condiciones de avance de un carro en un solo carril """

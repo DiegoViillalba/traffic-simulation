@@ -29,18 +29,13 @@ function separacion_dos_autos(auto1::Auto,auto2::Auto,L)
     l2 = auto2.largo
     if auto1 == auto2
         sep = L - l1
+    elseif (y2+l2/2) > y1 > (y2-l2/2) || (y1+l1/2) > y2 > (y1-l1/2)
+        # Los autos se solapan en Y: separación cero
+        sep = 0.0
+    elseif y1 > y2
+        sep = L - (y1 + l1/2) + (y2 - l2/2)
     else
-        if (y2+l2/2) > y1 > (y2-l2/2)
-            sep = 0
-        end
-        if (y1+l1/2) > y2 > (y1-l1/2)
-            sep = 0
-        end
-        if y1 > y2
-            sep = L - (y1 + l1/2) + (y2 - l2/2)
-        else
-            sep = (y2 - l2/2) - (y1 + l1/2)
-        end
+        sep = (y2 - l2/2) - (y1 + l1/2)
     end
     return abs(sep)
 end
