@@ -12,6 +12,7 @@ using Plots.PlotMeasures
 using LinearAlgebra
 using Statistics
 using LaTeXStrings
+using Logging
 
 # ── Core: estructuras de datos y física base ──────────────────────────────────
 include("core/estructuras.jl")

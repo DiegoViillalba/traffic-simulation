@@ -6,12 +6,12 @@
 
 experimento:
   nombre: "tesis_zuriel"
-  descripcion: "Reproduccion de resultados de tesis de Zuriel"
+  descripcion: "Reproduccion de resultados de tesis de Zuriel, density increased"
   tipo: "velocidades"          # benchmark | velocidades | flujo | desplazamiento
 
 vehiculos:
-  n: 55                      # autos en carril 1
-  m: 45                      # autos en carril 2
+  n: 22                      # autos en carril 1
+  m: 25                       # autos en carril 2
   ancho: 0.5142857142857143  # 18/35  [unidades de simulación]
   largo: 1.2857142857142858  # 9/7    [unidades de simulación]
 
@@ -34,7 +34,7 @@ comportamiento:
   egoismo: 0.8               # factor de egoísmo (0=altruista, 1=egoísta)
 
 simulacion:
-  pasos: 1000                # número de pasos temporales
+  pasos: 10000                # número de pasos temporales
   dt: 0.1                    # tamaño del paso temporal [s]
   benchmark_pasos_sat: 100   # repeticiones para benchmark SAT
   benchmark_pasos_paso: 20   # repeticiones para benchmark de paso completo
