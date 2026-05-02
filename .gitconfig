@@ -1,0 +1,16 @@
+# .gitconfig (local, project-specific)
+# Treat Jupyter notebooks as documentation for diff/merge/review purposes
+
+[diff "ipynb"]
+    textconv = jq .cells[].source
+    # Optionally, use nbstripout or nbdime for better notebook diffs
+
+[merge "ipynb"]
+    name = "Jupyter notebook merge driver (prefer ours)"
+    driver = echo "MERGE CONFLICT: please resolve manually (prefer keeping code/markdown, ignore outputs)"
+
+# Suggestion: Use nbdime for better notebook diff/merge experience
+# Install: pip install nbdime
+# Then run: nbdime config-git --enable
+
+# Note: This config only affects local git behavior. For full effect, set up .gitattributes as well.

@@ -30,5 +30,11 @@ JuliaLocalPreferences.toml
 # Resultados generados por la simulacion
 results/
 
+# --- Jupyter Notebook Output Ignore Policy ---
+# Consider notebook code and markdown as source/documentation, but ignore outputs/metadata noise.
+# Use nbstripout or similar tools to strip outputs before commit, or ignore output diffs in reviews.
+# To ignore notebook checkpoints and temporary files:
+.ipynb_checkpoints/
+# To ignore outputs in notebooks, recommend using nbstripout or similar in pre-commit hooks.
 
 .claude
