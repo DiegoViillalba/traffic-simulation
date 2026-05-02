@@ -272,7 +272,7 @@ println("Modulo TraficoSimulacion cargado.")
 
 println("Inicializando vehiculos...")
 t_init = @elapsed begin
-    vehiculos = carros_dos_carriles(ancho, largo, L, d_0_1, d_0_2 + 0.6, n, m; xs = 1/2)
+    vehiculos = carros_dos_carriles(ancho, largo, L, d_0_1, d_0_2, n, m; xs = 1/2)
 end
 println("  $(length(vehiculos)) vehiculos creados en $(round(t_init*1000, digits=1)) ms")
 println()
@@ -302,7 +302,7 @@ if hacer_benchmark
         egoismo, δt, L, d_0_1, d_0_2, α, μ, g, T_reac, colchon, acel, v_max, v_min, n, m)
     println("  Primer paso (con JIT): $(round(t_jit*1000, digits=1)) ms")
 
-    vehiculos = carros_dos_carriles(ancho, largo, L, d_0_1, d_0_2 + 0.6, n, m; xs = 1/2)
+    vehiculos = carros_dos_carriles(ancho, largo, L, d_0_1, d_0_2, n, m; xs = 1/2)
     giro_nogiro   = comprobacion_giro(vehiculos)
     θ_vec         = zeros(length(vehiculos))
     en_carril_ini = carros_i_carriles(vehiculos, carriless)
