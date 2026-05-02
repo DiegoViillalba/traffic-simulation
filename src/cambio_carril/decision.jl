@@ -84,7 +84,7 @@ function condiciones_permitir_giro_derecha(Auto,sep1,sep2,lista_carril1,lista_ca
 end
 
 """ conjunto de condiciones para permitir el cambio a la izquierda """
-function condiciones_permitir_giro_izquierda(Auto,sep1,sep2,lista_carril1,lista_carril2,θ1,egoismo,δt,L,d_0_2,α,μ,g,T_reac,colchon,acel,v_max,v_min)
+function condiciones_permitir_giro_izquierda(Auto,sep1,sep2,lista_carril1,lista_carril2,θ1,egoismo,δt,L,d_0_1,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     test1 = velocidades_test_izquierda(lista_carril1,lista_carril2,v_max,Auto)
     if test1
         return false
@@ -96,7 +96,7 @@ function condiciones_permitir_giro_izquierda(Auto,sep1,sep2,lista_carril1,lista_
         test = decide_cambiar_izquierda(Auto,lista_carril1,θ1,egoismo,δt,L,d_0_1,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     else
         test = true
-    end   
+    end
     return test
 end
 

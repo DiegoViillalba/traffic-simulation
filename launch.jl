@@ -28,15 +28,19 @@ Ejemplos:
 """
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 0. Directorio de trabajo = raiz del proyecto (donde vive este script)
+# 0. Directorio de trabajo + activar entorno del proyecto
 # ─────────────────────────────────────────────────────────────────────────────
 cd(@__DIR__)
+
+using Pkg
+Pkg.activate(@__DIR__; io=devnull)
 
 using Statistics
 using Dates
 using YAML
 using CSV
 using DataFrames
+using TraficoSimulacion
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 1. PARSEO DE ARGUMENTOS CLI
@@ -257,13 +261,10 @@ println("  Animacion   : $(hacer_animacion ? "si (fps=$fps_gif, calentamiento=$p
 println()
 
 # ─────────────────────────────────────────────────────────────────────────────
-# 6. CARGAR SIMULACION
+# 6. MODULO YA CARGADO
 # ─────────────────────────────────────────────────────────────────────────────
 
-println("Cargando modulos de simulacion...")
-t_carga = @elapsed include("src/trafico.jl")
-println("  Modulos cargados en $(round(t_carga, digits=2)) s")
-println()
+println("Modulo TraficoSimulacion cargado.")
 
 # ─────────────────────────────────────────────────────────────────────────────
 # 7. INICIALIZAR VEHICULOS

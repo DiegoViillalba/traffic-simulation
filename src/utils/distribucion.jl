@@ -2,7 +2,7 @@
 Implementa la condición de egoísmo de los conductores:
 retorna true si el auto obliga al de detrás a frenar más de (1-egoismo)*v_0
 """
-function egoismo_velocidad(a::Auto,egoismo,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,acel,colchon)
+function egoismo_velocidad(a::Auto,egoismo,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,acel,colchon,v_max,v_min)
     pasos =  tc/δt
     lista_carril2_copia = copiar_lista_autos_rapida(lista_carril2)
     if yc > L

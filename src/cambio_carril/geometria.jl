@@ -248,7 +248,7 @@ end
 """
 Calcula si las distancias seguras son suficientes para cambiar de carril
 """
-function distancias_segura_ij(a::Auto,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon)
+function distancias_segura_ij(a::Auto,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     pasos =  tc/δt
     lista_carril2_copia = copiar_lista_autos_rapida(lista_carril2)
     if yc > L
@@ -281,11 +281,11 @@ function decide_cambiar_derecha(a::Auto,lista_carril2,θ1,egoismo,δt,L,d_0,α,�
     if test
         return false
     end
-    test2 = distancias_segura_ij(a,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon)
+    test2 = distancias_segura_ij(a,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     if  test2
         return false
     end
-    test3 = egoismo_velocidad(a,egoismo,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,acel,colchon)
+    test3 = egoismo_velocidad(a,egoismo,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,acel,colchon,v_max,v_min)
     if test3
         return false
     end
@@ -302,16 +302,16 @@ function decide_cambiar_izquierda(a::Auto,lista_carril2,θ1,egoismo,δt,L,d_0,α
     prepasos = 1
     b = copia_auto_rapida(a)
     velocidad_angular_carro_correcion!(b,prepasos*δt,0)
-    yc,tc = b.esquinas[1][2], prepasos*δt  
+    yc,tc = b.esquinas[1][2], prepasos*δt
     test,i,j = encuentra_vecinos_fantasma_izquierda(a,yc,tc,δt,lista_carril2,d_0,L,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     if test
         return false
     end
-    test2 = distancias_segura_ij(a,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon)
+    test2 = distancias_segura_ij(a,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,colchon,acel,v_max,v_min)
     if  test2
         return false
     end
-    test3 = egoismo_velocidad(a,egoismo,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,acel,colchon)
+    test3 = egoismo_velocidad(a,egoismo,yc,tc,δt,lista_carril2,i,j,L,d_0,α,μ,g,T_reac,acel,colchon,v_max,v_min)
     if test3
         return false
     end
