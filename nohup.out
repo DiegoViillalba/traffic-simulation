@@ -1,0 +1,37 @@
+============================================================
+  SIMULACION DE TRAFICO — TESIS_ZURIEL
+============================================================
+  Config    : configs/tesis_zuriel.yaml
+  Resultados: results/tesis_zuriel_20260502_120327
+  Hilos     : 1
+  Grilla SAT: activada O(n)
+
+Parametros:
+  Descripcion : Reproduccion de resultados de tesis de Zuriel
+  Vehiculos   : n=55 (carril 1), m=45 (carril 2) = 100 total
+  Carretera   : L=110.0  |  dt=0.1  |  pasos=30000
+  Tiempo sim. : 3000.0 s  |  egoismo=0.8
+  Animacion   : no
+
+Modulo TraficoSimulacion cargado.
+Inicializando vehiculos...
+  100 vehiculos creados en 162.1 ms
+
+
+============================================================
+  SIMULACION  (30000 pasos, 100 autos)
+============================================================
+Ejecutando simulacion (30000 pasos)...
+  Completada en 2462.48 s
+  Velocidad inicial : 0.3216 u/paso
+  Velocidad final   : 0.7115 u/paso
+  Velocidad global  : 0.7 u/paso
+  Densidad carril 1 : rho1 = 0.1429 veh/m
+  Densidad carril 2 : rho2 = 0.1169 veh/m
+  velocidades.csv guardado.
+
+Resumen guardado en: results/tesis_zuriel_20260502_120327/resumen.yaml
+
+Completado. Resultados en: results/tesis_zuriel_20260502_120327
+2460.10user 10.87system 41:11.21elapsed 99%CPU (0avgtext+0avgdata 846052maxresident)k
+304inputs+1776outputs (0major+6403356minor)pagefaults 0swaps
