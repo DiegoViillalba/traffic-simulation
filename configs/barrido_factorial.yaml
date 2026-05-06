@@ -1,0 +1,105 @@
+# configs/barrido_factorial.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Barrido factorial completo — exploración del espacio de parámetros.
+#
+# Diseño: producto cartesiano de los cuatro factores principales:
+#
+#   Factor         Niveles  Valores
+#   ─────────────────────────────────────────────────────────────
+#   densidad       4        (n,m) ∈ {(8,7),(18,16),(32,28),(45,40)}
+#   egoismo        4        0.05 | 0.35 | 0.65 | 0.95
+#   T_reac         4        0.5  | 1.0  | 2.0  | 3.5
+#   v_max          3        2.0  | 3.5  | 5.0
+#   ─────────────────────────────────────────────────────────────
+#   Total                   4 × 4 × 4 × 3 = 192 corridas
+#
+# Tiempo estimado: ~0.5-2 s/corrida × 192 = 2-7 minutos (post-JIT).
+# Con --threads=auto puede reducirse significativamente.
+#
+# Lanzar con:
+#   julia --threads=auto sweep.jl --config configs/barrido_factorial.yaml
+#   julia --threads=auto sweep.jl --config configs/barrido_factorial.yaml --output results/factorial_01
+#
+# Métricas de salida (master_results.csv):
+#   v_estable, H_media, H_global, K_media, flujo, rho, tiempo_computo_s
+# ─────────────────────────────────────────────────────────────────────────────
+
+barrido:
+  nombre: "factorial_4x4x4x3"
+  descripcion: "Barrido factorial completo — densidad × egoismo × T_reac × v_max"
+  modo: "factorial"          # factorial | lista (para sweeps manuales)
+  seed_aleatorio: 42         # semilla para shuffling de corridas (reproducible)
+  mezclar: true              # mezclar orden para cobertura parcial si se interrumpe
+
+# ── Parámetros fijos ──────────────────────────────────────────────────────────
+fijos:
+  # Carretera
+  L: 100.0
+  d_0_1: 0.5
+  d_0_2: 0.5
+
+  # Vehículo (geometría normalizada al carril)
+  ancho: 0.5142857142857143   # 18/35
+  largo: 1.2857142857142858   # 9/7
+
+  # Física base (constantes)
+  alpha: 0.8
+  mu: 0.8
+  g: 2.803
+  acel: 1.0
+  colchon: 0.21
+  v_min: 0.001
+
+  # Simulación
+  dt: 0.1
+  pasos: 2500                 # suficiente para régimen estacionario en todos los regímenes
+  error: 1.0e-2
+  err: 1.0e-6
+  d_interaccion: 2.2          # umbral de vecindad uniforme para comparabilidad
+
+  # Resultados por corrida
+  guardar_velocidades: false         # no guardar series (ahorra disco)
+  guardar_interacciones: false       # solo métricas escalares en master CSV
+  guardar_interacciones_vehiculos: false
+
+# ── Factores a barrer (producto cartesiano) ───────────────────────────────────
+factores:
+
+  # Factor 1: densidad — cuatro puntos del diagrama fundamental
+  # rho_total ≈ (n+m) / (2*L): baja=0.075, media=0.170, alta=0.300, crítica=0.425
+  densidad:
+    - {n:  8, m:  7}   # rho ≈ 0.075  — flujo libre / bajo tráfico
+    - {n: 18, m: 16}   # rho ≈ 0.170  — densidad media, régimen mixto
+    - {n: 32, m: 28}   # rho ≈ 0.300  — cercano al punto crítico
+    - {n: 45, m: 40}   # rho ≈ 0.425  — congestión pronunciada
+
+  # Factor 2: egoismo — de altruista a agresivo
+  egoismo:
+    - 0.05    # casi altruista — muy pocos cambios de carril
+    - 0.35    # comportamiento moderado
+    - 0.65    # tendencia egoísta
+    - 0.95    # máxima agresividad — cambio de carril permanente
+
+  # Factor 3: T_reac — tiempo de reacción del conductor
+  # Valores bajos → sistema estable; valores altos → inestabilidades stop-and-go
+  T_reac:
+    - 0.5     # reacción muy rápida — sistema estable en cualquier densidad
+    - 1.0     # reacción normal — límite de estabilidad depende de densidad
+    - 2.0     # reacción lenta — inestabilidades a densidad media-alta
+    - 3.5     # reacción muy lenta — ondas stop-and-go generalizadas
+
+  # Factor 4: v_max — velocidad máxima permitida
+  # Cambia la energía del sistema y la magnitud del flujo
+  v_max:
+    - 2.0     # zona residencial / congestionada
+    - 3.5     # vía urbana rápida / mixta
+    - 5.0     # autopista — velocidades altas
+
+# ── Métricas a extraer de cada corrida ───────────────────────────────────────
+metricas:
+  fraccion_estable: 0.4    # usar la última fraccion_estable del tiempo para promedios
+  # Columnas del master CSV:
+  #   run_id, n, m, egoismo, T_reac, v_max,
+  #   rho, v_estable, flujo_estable,
+  #   H_media, H_global, K_media,
+  #   estado, tiempo_computo_s, error_msg
