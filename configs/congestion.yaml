@@ -1,0 +1,54 @@
+# configs/congestion.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Experimento: régimen de congestión — alta densidad + tiempo de reacción largo.
+#
+# Se espera:
+#   - Velocidad que colapsa a v_min
+#   - Entropía H que decrece (todos los autos tienen el mismo número de vecinos
+#     porque están compactados → distribución de k degenerada)
+#   - Ondas de parada-arranque visibles en el heatmap de N_int por vehículo
+#   - flujo q < q_max a pesar de la alta densidad (rama congestionada del
+#     diagrama fundamental)
+# ─────────────────────────────────────────────────────────────────────────────
+
+experimento:
+  nombre: "congestion"
+  descripcion: "Alta densidad y T_reac largo — regimen congestionado con ondas stop-and-go"
+  tipo: "velocidades"
+
+vehiculos:
+  n: 38
+  m: 34
+  ancho: 0.5142857142857143
+  largo: 1.2857142857142858
+
+carretera:
+  L: 100.0
+  d_0_1: 0.5
+  d_0_2: 0.5
+
+fisica:
+  alpha: 0.8
+  mu: 0.8
+  g: 2.803
+  T_reac: 2.5                # tiempo de reacción lento → inestabilidad
+  acel: 0.6                  # aceleración suave
+  colchon: 0.3
+  v_max: 4.0
+  v_min: 0.001
+
+comportamiento:
+  egoismo: 0.6
+
+simulacion:
+  pasos: 4000                # necesita más pasos para ver la dinámica completa
+  dt: 0.1
+  error: 1.0e-2
+  err: 1.0e-6
+  d_interaccion: 1.8         # umbral ajustado a densidad alta
+
+resultados:
+  guardar_velocidades: true
+  guardar_benchmarks: false
+  guardar_interacciones: true
+  guardar_interacciones_vehiculos: true    # necesario para ver ondas por vehículo

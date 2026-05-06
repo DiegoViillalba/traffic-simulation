@@ -1,0 +1,57 @@
+# configs/barrido_egoismo.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Experimento: barrido de egoísmo — transición de fase en la entropía.
+#
+# El parámetro egoismo controla la probabilidad de cambio de carril:
+#   egoismo=0.0 → conductores altruistas, no cambian de carril
+#   egoismo=0.5 → comportamiento mixto
+#   egoismo=1.0 → conductores agresivos, cambio máximo
+#
+# Se espera una transición en H(t) y en la distribución de vecinos:
+#   - bajo egoismo: flujo ordenado, H baja, pocos cambios de carril
+#   - alto egoismo: flujo caótico, H alta, muchas interacciones laterales
+#
+# Lanzar con distintos valores de --config o modificar egoismo aquí.
+# ─────────────────────────────────────────────────────────────────────────────
+
+experimento:
+  nombre: "barrido_egoismo"
+  descripcion: "Transicion de fase en entropia de interaccion vs egoismo del conductor"
+  tipo: "velocidades"
+
+vehiculos:
+  n: 20
+  m: 18
+  ancho: 0.5142857142857143
+  largo: 1.2857142857142858
+
+carretera:
+  L: 80.0
+  d_0_1: 0.5
+  d_0_2: 0.5
+
+fisica:
+  alpha: 0.8
+  mu: 0.8
+  g: 2.803
+  T_reac: 1.0
+  acel: 1.0
+  colchon: 0.21
+  v_max: 4.0
+  v_min: 0.001
+
+comportamiento:
+  egoismo: 0.95              # CAMBIAR: 0.0 | 0.25 | 0.5 | 0.75 | 0.95
+
+simulacion:
+  pasos: 2000
+  dt: 0.1
+  error: 1.0e-2
+  err: 1.0e-6
+  d_interaccion: 2.5         # incluye vecinos del carril adyacente
+
+resultados:
+  guardar_velocidades: true
+  guardar_benchmarks: false
+  guardar_interacciones: true
+  guardar_interacciones_vehiculos: true    # ver trayectorias individuales

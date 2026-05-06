@@ -1,0 +1,53 @@
+# configs/barrido_densidad.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Experimento: densidad media — punto de operación para el diagrama fundamental.
+# Lanzar varias veces variando n+m con --pasos 3000 para trazar rho vs flujo.
+#
+# Densidades sugeridas (L=100):
+#   baja  : n=5,  m=4   → rho ≈ 0.045
+#   media : n=15, m=12  → rho ≈ 0.135  (este config)
+#   alta  : n=30, m=25  → rho ≈ 0.275
+#   critica: n=45, m=40 → rho ≈ 0.425
+# ─────────────────────────────────────────────────────────────────────────────
+
+experimento:
+  nombre: "barrido_densidad"
+  descripcion: "Densidad media para diagrama fundamental rho-q-v con entropia"
+  tipo: "velocidades"
+
+vehiculos:
+  n: 15                      # autos en carril 1
+  m: 12                      # autos en carril 2
+  ancho: 0.5142857142857143  # 18/35
+  largo: 1.2857142857142858  # 9/7
+
+carretera:
+  L: 100.0                   # carretera larga: mejor estadística
+  d_0_1: 0.5
+  d_0_2: 0.5
+
+fisica:
+  alpha: 0.8
+  mu: 0.8
+  g: 2.803
+  T_reac: 1.0
+  acel: 1.0
+  colchon: 0.21
+  v_max: 4.0
+  v_min: 0.001
+
+comportamiento:
+  egoismo: 0.7
+
+simulacion:
+  pasos: 3000                # suficiente para régimen estacionario
+  dt: 0.1
+  error: 1.0e-2
+  err: 1.0e-6
+  d_interaccion: 2.0         # umbral físico: ~1.5 × distancia de seguridad
+
+resultados:
+  guardar_velocidades: true
+  guardar_benchmarks: false
+  guardar_interacciones: true
+  guardar_interacciones_vehiculos: false   # true = CSV grande (pasos × n_veh)

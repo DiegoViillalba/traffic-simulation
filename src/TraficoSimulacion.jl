@@ -50,9 +50,10 @@ include("simulacion/dos_carriles.jl")
 # ── Utilidades: distribución automática de autos ─────────────────────────────
 include("utils/distribucion.jl")
 
-# ── Mediciones: velocidades, análisis y exportación CSV ──────────────────────
+# ── Mediciones: velocidades, análisis, interacciones y exportación CSV ───────
 include("mediciones/velocidades.jl")
 include("mediciones/analisis.jl")
+include("mediciones/interacciones.jl")
 include("mediciones/exportacion.jl")
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -89,6 +90,13 @@ export avance_carros_un_carril_individual
 
 # Detección de colisiones (SAT)
 export haySuperposicionesSAT_error, seSuperponenSAT
+
+# Medición de interacciones y entropía
+export contar_vecinos_paso
+export avance_dos_carril_velocidades_e_interacciones
+export entropia_shannon, entropia_por_paso, entropia_global
+export historial_interacciones_vehiculo, distribucion_interacciones
+export guardar_interacciones_csv
 
 # Medición de velocidades
 export avance_dos_carril_valocidades_promedio

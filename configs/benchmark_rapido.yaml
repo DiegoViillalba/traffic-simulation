@@ -44,4 +44,5 @@ simulacion:
 resultados:
   guardar_velocidades: true
   guardar_benchmarks: true
-  guardar_csv: false         # no guardar CSV en benchmark rápido
+  guardar_interacciones: false       # no medir entropia en benchmark rapido
+  guardar_interacciones_vehiculos: false
