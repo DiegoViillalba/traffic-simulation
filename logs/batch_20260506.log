@@ -1,0 +1,164 @@
+Precompiling packages...
+   4544.9 ms  ✓ TraficoSimulacion
+  1 dependency successfully precompiled in 5 seconds. 206 already precompiled.
+============================================================
+  SIMULACION DE TRAFICO — BARRIDO_DENSIDAD
+============================================================
+  Config       : configs/barrido_densidad.yaml
+  Resultados   : results/barrido_densidad_20260506_134450
+  Hilos        : 8
+  Grilla SAT   : activada O(n)
+  Interacciones: si
+
+Parametros:
+  Descripcion : Densidad media para diagrama fundamental rho-q-v con entropia
+  Vehiculos   : n=15 (carril 1), m=12 (carril 2) = 27 total
+  Carretera   : L=100.0  |  dt=0.1  |  pasos=3000
+  Tiempo sim. : 300.0 s  |  egoismo=0.7
+  Animacion   : no
+
+Modulo TraficoSimulacion cargado.
+Inicializando vehiculos...
+  27 vehiculos creados en 139.7 ms
+  Umbral de interaccion: d_int = 2.0 u
+
+
+============================================================
+  SIMULACION  (3000 pasos, 27 autos)
+============================================================
+Ejecutando simulacion con medicion de interacciones (3000 pasos)...
+  d_interaccion = 2.0 u
+  Completada en 23.15 s
+
+Velocidades:
+  V inicial        : 0.8247 u/s
+  V final          : 3.7155 u/s
+  V media          : 3.5935 u/s
+  V media estable  : 3.7155 u/s  (2da mitad)
+  Densidad rho1    : 0.15  |  rho2: 0.12
+
+Interacciones (d_int=2.0):
+  Vecinos medio    : 0.659
+  Vecinos inicio   : 2.889
+  Vecinos final    : 0.593
+  Entropia H media : 0.9035 bits
+  Entropia H inicio: 1.7401 bits
+  Entropia H final : 0.9751 bits
+  Entropia H global: 1.0701 bits
+
+--------------------------------------------------
+Guardando resultados...
+  velocidades.csv          (3000 filas)
+  interacciones_series.csv (3000 filas)
+
+============================================================
+Completado. Resultados en: results/barrido_densidad_20260506_134450
+============================================================
+============================================================
+  SIMULACION DE TRAFICO — BARRIDO_EGOISMO
+============================================================
+  Config       : configs/barrido_egoismo.yaml
+  Resultados   : results/barrido_egoismo_20260506_134521
+  Hilos        : 8
+  Grilla SAT   : activada O(n)
+  Interacciones: si
+
+Parametros:
+  Descripcion : Transicion de fase en entropia de interaccion vs egoismo del conductor
+  Vehiculos   : n=20 (carril 1), m=18 (carril 2) = 38 total
+  Carretera   : L=80.0  |  dt=0.1  |  pasos=2000
+  Tiempo sim. : 200.0 s  |  egoismo=0.95
+  Animacion   : no
+
+Modulo TraficoSimulacion cargado.
+Inicializando vehiculos...
+  38 vehiculos creados en 145.3 ms
+  Umbral de interaccion: d_int = 2.5 u
+
+
+============================================================
+  SIMULACION  (2000 pasos, 38 autos)
+============================================================
+Ejecutando simulacion con medicion de interacciones (2000 pasos)...
+  d_interaccion = 2.5 u
+  Completada en 30.27 s
+
+Velocidades:
+  V inicial        : 0.7545 u/s
+  V final          : 2.0643 u/s
+  V media          : 1.9265 u/s
+  V media estable  : 2.0642 u/s  (2da mitad)
+  Densidad rho1    : 0.25  |  rho2: 0.225
+
+Interacciones (d_int=2.5):
+  Vecinos medio    : 1.229
+  Vecinos inicio   : 4.105
+  Vecinos final    : 1.0
+  Entropia H media : 0.6087 bits
+  Entropia H inicio: 1.6666 bits
+  Entropia H final : 0.0 bits
+  Entropia H global: 1.0636 bits
+
+--------------------------------------------------
+Guardando resultados...
+  velocidades.csv          (2000 filas)
+  interacciones_series.csv (2000 filas)
+  interacciones_vehiculos.csv (2000 pasos × 38 autos)
+
+============================================================
+Completado. Resultados en: results/barrido_egoismo_20260506_134521
+============================================================
+============================================================
+  SIMULACION DE TRAFICO — CONGESTION
+============================================================
+  Config       : configs/congestion.yaml
+  Resultados   : results/congestion_20260506_134600
+  Hilos        : 8
+  Grilla SAT   : activada O(n)
+  Interacciones: si
+
+Parametros:
+  Descripcion : Alta densidad y T_reac largo — regimen congestionado con ondas stop-and-go
+  Vehiculos   : n=38 (carril 1), m=34 (carril 2) = 72 total
+  Carretera   : L=100.0  |  dt=0.1  |  pasos=4000
+  Tiempo sim. : 400.0 s  |  egoismo=0.6
+  Animacion   : no
+
+Modulo TraficoSimulacion cargado.
+Inicializando vehiculos...
+  72 vehiculos creados en 140.0 ms
+  Umbral de interaccion: d_int = 1.8 u
+
+
+============================================================
+  SIMULACION  (4000 pasos, 72 autos)
+============================================================
+Ejecutando simulacion con medicion de interacciones (4000 pasos)...
+  d_interaccion = 1.8 u
+  Completada en 178.28 s
+
+Velocidades:
+  V inicial        : 0.3614 u/s
+  V final          : 0.4516 u/s
+  V media          : 0.4083 u/s
+  V media estable  : 0.432 u/s  (2da mitad)
+  Densidad rho1    : 0.38  |  rho2: 0.34
+
+Interacciones (d_int=1.8):
+  Vecinos medio    : 1.431
+  Vecinos inicio   : 2.528
+  Vecinos final    : 1.389
+  Entropia H media : 1.3846 bits
+  Entropia H inicio: 2.0095 bits
+  Entropia H final : 1.2011 bits
+  Entropia H global: 1.587 bits
+
+--------------------------------------------------
+Guardando resultados...
+  velocidades.csv          (4000 filas)
+  interacciones_series.csv (4000 filas)
+  interacciones_vehiculos.csv (4000 pasos × 72 autos)
+
+============================================================
+Completado. Resultados en: results/congestion_20260506_134600
+============================================================
